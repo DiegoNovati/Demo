@@ -2,12 +2,16 @@ package uk.co.itmms.demo.activities
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import uk.co.itmms.demo.DataInterface
+import dagger.hilt.android.lifecycle.HiltViewModel
+import uk.co.itmms.demo.usecases.main.UseCaseMainInit
+import uk.co.itmms.demo.usecases.main.UseCaseMainListTodo
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
-
-    private val useCaseMainInit = DataInterface.getUseCaseMainInit()
-
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    useCaseMainInit: UseCaseMainInit,
+    useCaseMainListTodo: UseCaseMainListTodo,
+): ViewModel() {
     init {
         useCaseMainInit.invoke(viewModelScope) {
             it.fold({ failure ->
@@ -16,5 +20,16 @@ class MainViewModel : ViewModel() {
                 println("********** useCaseMainInit: Success")
             }
         }
+        useCaseMainListTodo.invoke(viewModelScope) {
+            it.fold({ failure ->
+                println("********** useCaseMainListTodo: Failure = $failure")
+            }){ result ->
+                println("********** useCaseMainListTodo: Success = $result")
+            }
+        }
+    }
+
+    fun loadDatabase() {
+        println("********** loadDatabase")
     }
 }

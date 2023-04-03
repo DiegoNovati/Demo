@@ -1,23 +1,38 @@
 package uk.co.itmms.demo
 
 import android.content.Context
+import uk.co.itmms.demo.datasources.DataSourceDatabase
 import uk.co.itmms.demo.datasources.DataSourcesSystemInfo
+import uk.co.itmms.demo.datasources.IDataSourceDatabase
 import uk.co.itmms.demo.datasources.IDataSourcesSystemInfo
+import uk.co.itmms.demo.datasources.database.IDatabaseApp
+import uk.co.itmms.demo.datasources.database.openDatabase
 import uk.co.itmms.demo.repositories.IRepositorySystemInfo
+import uk.co.itmms.demo.repositories.IRepositoryTodo
 import uk.co.itmms.demo.repositories.RepositorySystemInfo
+import uk.co.itmms.demo.repositories.RepositoryTodo
 import uk.co.itmms.demo.usecases.main.UseCaseMainInit
+import uk.co.itmms.demo.usecases.main.UseCaseMainListTodo
 
 object DataInterface {
 
     private lateinit var applicationContext: Context
+    private lateinit var databaseApp: IDatabaseApp
 
     fun initDataLayer(applicationContext: Context) {
         this.applicationContext = applicationContext
+
+        databaseApp = openDatabase(applicationContext, "demo.db")
     }
 
     fun getUseCaseMainInit(): UseCaseMainInit =
         UseCaseMainInit(
             repositorySystemInfo = repositorySystemInfo,
+        )
+
+    fun getUseCaseMainListTodo(): UseCaseMainListTodo =
+        UseCaseMainListTodo(
+            repositoryTodo = repositoryTodo,
         )
 
     private val repositorySystemInfo: IRepositorySystemInfo by lazy {
@@ -26,7 +41,21 @@ object DataInterface {
         )
     }
 
+    private val repositoryTodo: IRepositoryTodo by lazy {
+        RepositoryTodo(
+            dataSourceDatabase = dataSourceDatabase,
+        )
+    }
+
     private val dataSourcesSystemInfo: IDataSourcesSystemInfo by lazy {
-        DataSourcesSystemInfo(applicationContext)
+        DataSourcesSystemInfo(
+            context = applicationContext,
+        )
+    }
+
+    private val dataSourceDatabase: IDataSourceDatabase by lazy {
+        DataSourceDatabase(
+            databaseApp = databaseApp,
+        )
     }
 }

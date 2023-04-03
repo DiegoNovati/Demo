@@ -1,9 +1,11 @@
 package uk.co.itmms.demo.application
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
+import dagger.hilt.android.HiltAndroidApp
 import uk.co.itmms.demo.DataInterface
 
-class DemoApplication : Application() {
+@HiltAndroidApp
+class DemoApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()

@@ -1,18 +1,26 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
     namespace 'uk.co.itmms.demo'
-    compileSdk 33
+    compileSdk sdk_compile
 
     defaultConfig {
-        minSdk 21
-        targetSdk 33
+        minSdk sdk_min
+        targetSdk sdk_target
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        kapt {
+            arguments {
+                arg("room.schemaLocation", "$projectDir/schemas")
+                arg("room.incremental", "true")
+            }
+        }
     }
 
     buildTypes {
@@ -28,15 +36,50 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
     implementation project(path: ':domain')
 
+    // Android SDK
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Room
+    def roomVersion = "2.5.1"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
+    // ********** Testing **********
+
+    // Android
+    testImplementation "androidx.arch.core:core-testing:$core_testing_version"
+
+    // JUnit
+    testImplementation "junit:junit:$junit_version"
+
+    // MockK
+    testImplementation "io.mockk:mockk:$mockk_version"
+
+    // Coroutines
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-debug:$coroutines_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+
+    // Robolectric
+    def robolectricVersion = '4.9.2'
+    testImplementation "org.robolectric:robolectric:$robolectricVersion"
+    testImplementation "org.robolectric:shadows-multidex:$robolectricVersion"
+
+    // ********** Android Testing **********
+
+    // JUnit
+    androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
+
+    // Espresso
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
 }
