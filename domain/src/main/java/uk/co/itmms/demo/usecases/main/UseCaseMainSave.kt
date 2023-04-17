@@ -7,20 +7,20 @@ import uk.co.itmms.demo.repositories.IRepositoryDevelopmentAnalytics
 import uk.co.itmms.demo.repositories.IRepositoryDevelopmentLogger
 import uk.co.itmms.demo.repositories.IRepositoryTodo
 
-class UseCaseMainListTodo(
+class UseCaseMainSave(
     repositoryDevelopmentLogger: IRepositoryDevelopmentLogger,
     repositoryDevelopmentAnalytics: IRepositoryDevelopmentAnalytics,
     private val repositoryTodo: IRepositoryTodo,
-) : UseCaseBase<NoParams, UseCaseMainListTodo.Result, MainFailure>(
+) : UseCaseBase<UseCaseMainSave.Params, Unit, MainFailure>(
     repositoryDevelopmentLogger = repositoryDevelopmentLogger,
     repositoryDevelopmentAnalytics = repositoryDevelopmentAnalytics,
 ) {
-    data class Result(
-        val todoList: List<Todo>,
+    data class Params(
+        val todo: Todo,
     )
 
-    override suspend fun run(params: NoParams): Either<MainFailure, Result> =
-        Result(
-            todoList = repositoryTodo.list(),
-        ).right()
+    override suspend fun run(params: Params): Either<MainFailure, Unit> {
+        repositoryTodo.save(params.todo)
+        return Unit.right()
+    }
 }

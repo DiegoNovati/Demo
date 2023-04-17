@@ -37,7 +37,7 @@ class UseCaseMainInitTest {
 
         coEvery { mockRepositorySystemInfo.getSystemInfo() } returns IRepositorySystemInfo.SystemInfo(2124)
 
-        useCaseMainInit.invoke(this) { result ->
+        useCaseMainInit.invoke(NoParams, this) { result ->
             result.fold({ failure ->
                 assertEquals(MainFailure.NotEnoughMemory, failure)
             }){
@@ -57,7 +57,7 @@ class UseCaseMainInitTest {
 
         coEvery { mockRepositorySystemInfo.getSystemInfo() } returns IRepositorySystemInfo.SystemInfo(5000)
 
-        useCaseMainInit.invoke(this) { result ->
+        useCaseMainInit.invoke(NoParams,this) { result ->
             result.fold({ failure ->
                 assertEquals(MainFailure.BarelyEnoughMemory, failure)
             }){
@@ -77,7 +77,7 @@ class UseCaseMainInitTest {
 
         coEvery { mockRepositorySystemInfo.getSystemInfo() } returns IRepositorySystemInfo.SystemInfo(8000)
 
-        useCaseMainInit.invoke(this) { result ->
+        useCaseMainInit.invoke(NoParams,this) { result ->
             assertTrue(result.isRight())
         }
 

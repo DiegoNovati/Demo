@@ -39,7 +39,7 @@ class DataSourceDatabaseTodoTest : BaseDataTest() {
     }
 
     @Test
-    fun `tetsing get`() = runBlocking {
+    fun `testing get`() = runBlocking {
         val id = 1
 
         coEvery { mockDaoTodo.get(id) } returns dbTodo

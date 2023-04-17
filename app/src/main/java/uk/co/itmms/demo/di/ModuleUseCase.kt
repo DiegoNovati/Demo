@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import uk.co.itmms.demo.DataInterface
 import uk.co.itmms.demo.usecases.main.UseCaseMainInit
 import uk.co.itmms.demo.usecases.main.UseCaseMainListTodo
+import uk.co.itmms.demo.usecases.main.UseCaseMainSave
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -19,4 +20,8 @@ object ModuleUseCase {
     @Provides
     fun provideUseCaseMainListTodo(): UseCaseMainListTodo =
         DataInterface.getUseCaseMainListTodo()
+
+    @Provides
+    fun provideUseCaseMainSave(): UseCaseMainSave =
+        DataInterface.getUseCaseMainSave()
 }
