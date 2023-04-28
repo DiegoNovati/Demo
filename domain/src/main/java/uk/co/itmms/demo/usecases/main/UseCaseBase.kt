@@ -34,11 +34,11 @@ abstract class UseCaseBase<Params, Result, Failure>(
         }
     }
 
-    private fun analyticsUseCase(executionTime: Long) {
+    private suspend fun analyticsUseCase(executionTime: Long) {
         repositoryDevelopmentAnalytics.logUseCase(javaClass.simpleName, executionTime)
     }
 
-    private fun logUnexpectedError(params: Params, executionTime: Long, e: Throwable) {
+    private suspend fun logUnexpectedError(params: Params, executionTime: Long, e: Throwable) {
         repositoryDevelopmentLogger.logIssue(
             javaClass.simpleName,
             createJson(
@@ -46,6 +46,7 @@ abstract class UseCaseBase<Params, Result, Failure>(
                 millsec = executionTime,
                 error = e.stackTraceToString(),
             ))
+        repositoryDevelopmentLogger.send()
     }
 
     private fun createJson(params: String, millsec: Long, error: String): String {

@@ -1,6 +1,5 @@
 package uk.co.itmms.demo.usecases.main
 
-import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
@@ -11,25 +10,18 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
+import uk.co.itmms.demo.BaseDomainTest
 import uk.co.itmms.demo.repositories.IRepositorySystemInfo
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class UseCaseMainInitTest {
+class UseCaseMainInitTest : BaseDomainTest() {
 
     @MockK
     private lateinit var mockRepositorySystemInfo: IRepositorySystemInfo
 
     @InjectMockKs
     private lateinit var useCaseMainInit: UseCaseMainInit
-
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this, relaxUnitFun = true)
-    }
-
-    // fun invoke(scope: CoroutineScope, onResult: (result: Either<MainFailure, Unit>) -> Unit) {
 
     @Test
     fun `not enough memory`() = runBlocking {
