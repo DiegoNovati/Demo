@@ -11,6 +11,7 @@ sealed interface IFailure
 sealed interface FailureMain : IFailure {
     object NotEnoughMemory : FailureMain
     object BarelyEnoughMemory : FailureMain
+    object NoteError : FailureMain
 }
 
 sealed interface FailureHome : IFailure

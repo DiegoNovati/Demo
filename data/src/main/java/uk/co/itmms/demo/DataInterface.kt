@@ -17,13 +17,17 @@ import uk.co.itmms.demo.datasources.database.IDatabaseApp
 import uk.co.itmms.demo.datasources.database.openDatabase
 import uk.co.itmms.demo.repositories.IRepositoryDevelopmentAnalytics
 import uk.co.itmms.demo.repositories.IRepositoryDevelopmentLogger
+import uk.co.itmms.demo.repositories.IRepositoryNote
 import uk.co.itmms.demo.repositories.IRepositorySystemInfo
 import uk.co.itmms.demo.repositories.IRepositoryTodo
 import uk.co.itmms.demo.repositories.RepositoryDevelopmentAnalytics
 import uk.co.itmms.demo.repositories.RepositoryDevelopmentLogger
+import uk.co.itmms.demo.repositories.RepositoryNote
 import uk.co.itmms.demo.repositories.RepositorySystemInfo
 import uk.co.itmms.demo.repositories.RepositoryTodo
+import uk.co.itmms.demo.usecases.home.UseCaseHomeListNote
 import uk.co.itmms.demo.usecases.main.UseCaseMainInit
+import uk.co.itmms.demo.usecases.main.UseCaseMainList
 import uk.co.itmms.demo.usecases.main.UseCaseMainListTodo
 import uk.co.itmms.demo.usecases.main.UseCaseMainSave
 
@@ -45,6 +49,14 @@ object DataInterface {
             repositorySystemInfo = repositorySystemInfo,
         )
 
+    fun getUseCaseMainList(): UseCaseMainList =
+        UseCaseMainList(
+            repositoryDevelopmentLogger = repositoryDevelopmentLogger,
+            repositoryDevelopmentAnalytics = repositoryDevelopmentAnalytics,
+            repositoryTodo = repositoryTodo,
+            repositoryNote = repositoryNote,
+        )
+
     fun getUseCaseMainListTodo(): UseCaseMainListTodo =
         UseCaseMainListTodo(
             repositoryDevelopmentLogger = repositoryDevelopmentLogger,
@@ -59,6 +71,13 @@ object DataInterface {
             repositoryTodo = repositoryTodo,
         )
 
+    fun getUseCaseHomeListNote(): UseCaseHomeListNote =
+        UseCaseHomeListNote(
+            repositoryDevelopmentLogger = repositoryDevelopmentLogger,
+            repositoryDevelopmentAnalytics = repositoryDevelopmentAnalytics,
+            repositoryNote = repositoryNote,
+        )
+
     private val repositorySystemInfo: IRepositorySystemInfo by lazy {
         RepositorySystemInfo(
             dataSourcesSystemInfo = dataSourcesSystemInfo,
@@ -69,6 +88,10 @@ object DataInterface {
         RepositoryTodo(
             dataSourceDatabase = dataSourceDatabase,
         )
+    }
+
+    private val repositoryNote: IRepositoryNote by lazy {
+        RepositoryNote()
     }
 
     private val repositoryDevelopmentLogger: IRepositoryDevelopmentLogger by lazy {
@@ -88,7 +111,6 @@ object DataInterface {
             ),
         )
     }
-
 
     private val dataSourceDevelopmentLoggerConsole: IDataSourceDevelopmentLogger by lazy {
         DataSourceDevelopmentLoggerConsole(
