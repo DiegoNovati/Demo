@@ -1,9 +1,11 @@
-package uk.co.itmms.demo.usecases.main
+package uk.co.itmms.demo.usecases
 
 import arrow.core.Either
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import uk.co.itmms.demo.failures.IFailure
+import uk.co.itmms.demo.failures.UnexpectedError
 import uk.co.itmms.demo.repositories.IRepositoryDevelopmentAnalytics
 import uk.co.itmms.demo.repositories.IRepositoryDevelopmentLogger
 
@@ -12,7 +14,7 @@ object NoParams
 abstract class UseCaseBase<Params, Result, Failure>(
     private val repositoryDevelopmentLogger: IRepositoryDevelopmentLogger,
     private val repositoryDevelopmentAnalytics: IRepositoryDevelopmentAnalytics,
-) where Params: Any, Result: Any, Failure: Any {
+) where Params: Any, Result: Any, Failure: IFailure {
 
     abstract suspend fun run(params: Params): Either<Failure, Result>
 
@@ -28,7 +30,8 @@ abstract class UseCaseBase<Params, Result, Failure>(
             } catch (e: Throwable) {
                 logUnexpectedError(params, getExecutionTime(startMillis), e)
                 scope.launch(Dispatchers.Main) {
-                    //onResult(Either.left(MainFailure.UnexpectedError))
+                    @Suppress("UNCHECKED_CAST")
+                    onResult(Either.Left(UnexpectedError(e) as Failure))
                 }
             }
         }

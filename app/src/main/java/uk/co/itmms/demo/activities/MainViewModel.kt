@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import uk.co.itmms.demo.entities.Todo
-import uk.co.itmms.demo.usecases.main.NoParams
+import uk.co.itmms.demo.failures.FailureMain
+import uk.co.itmms.demo.failures.UnexpectedError
+import uk.co.itmms.demo.usecases.NoParams
 import uk.co.itmms.demo.usecases.main.UseCaseMainInit
 import uk.co.itmms.demo.usecases.main.UseCaseMainListTodo
 import uk.co.itmms.demo.usecases.main.UseCaseMainSave
@@ -17,9 +19,11 @@ class MainViewModel @Inject constructor(
     private val useCaseMainSave: UseCaseMainSave,
 ): ViewModel() {
     init {
+        // display the progress loader
         useCaseMainInit.invoke(NoParams, viewModelScope) {
+            // hide the progress loader
             it.fold({ failure ->
-                println("********** useCaseMainInit: Failure = $failure")
+                showFailure("useCaseMainInit", failure)
             }){
                 println("********** useCaseMainInit: Success")
             }
@@ -30,7 +34,7 @@ class MainViewModel @Inject constructor(
     fun loadDatabase() {
         useCaseMainListTodo.invoke(NoParams, viewModelScope) {
             it.fold({ failure ->
-                println("********** useCaseMainListTodo: Failure = $failure")
+                showFailure("useCaseMainListTodo", failure)
             }){ result ->
                 println("********** useCaseMainListTodo: Success = $result")
             }
@@ -47,10 +51,18 @@ class MainViewModel @Inject constructor(
         )
         useCaseMainSave.invoke(params, viewModelScope) {
             it.fold({ failure ->
-                println("********** useCaseMainSave: Failure = $failure")
+                showFailure("useCaseMainSave", failure)
             }){
                 println("********** useCaseMainSave: Success")
             }
+        }
+    }
+
+    private fun showFailure(useCaseName: String, failure: FailureMain) {
+        when (failure) {
+            FailureMain.BarelyEnoughMemory -> println("********** $useCaseName: Failure = BarelyEnoughMemory")
+            FailureMain.NotEnoughMemory -> println("********** $useCaseName: Failure = NotEnoughMemory")
+            is UnexpectedError -> println("********** $useCaseName: Failure = ${failure.e}")
         }
     }
 }

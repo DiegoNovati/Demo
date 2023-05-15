@@ -12,7 +12,9 @@ import kotlinx.coroutines.test.setMain
 import org.junit.Assert.*
 import org.junit.Test
 import uk.co.itmms.demo.BaseDomainTest
+import uk.co.itmms.demo.failures.FailureMain
 import uk.co.itmms.demo.repositories.IRepositorySystemInfo
+import uk.co.itmms.demo.usecases.NoParams
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class UseCaseMainInitTest : BaseDomainTest() {
@@ -31,7 +33,7 @@ class UseCaseMainInitTest : BaseDomainTest() {
 
         useCaseMainInit.invoke(NoParams, this) { result ->
             result.fold({ failure ->
-                assertEquals(MainFailure.NotEnoughMemory, failure)
+                assertEquals(FailureMain.NotEnoughMemory, failure)
             }){
                 fail("Unexpected success")
             }
@@ -51,7 +53,7 @@ class UseCaseMainInitTest : BaseDomainTest() {
 
         useCaseMainInit.invoke(NoParams,this) { result ->
             result.fold({ failure ->
-                assertEquals(MainFailure.BarelyEnoughMemory, failure)
+                assertEquals(FailureMain.BarelyEnoughMemory, failure)
             }){
                 fail("Unexpected success")
             }

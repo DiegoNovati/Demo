@@ -47,7 +47,7 @@ dependencies {
     implementation project(path: ':domain')
 
     // Android SDK
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
 
     // Room
@@ -71,7 +71,7 @@ dependencies {
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 
     // Robolectric
-    def robolectricVersion = '4.9.2'
+    def robolectricVersion = '4.10.2'
     testImplementation "org.robolectric:robolectric:$robolectricVersion"
     testImplementation "org.robolectric:shadows-multidex:$robolectricVersion"
 
